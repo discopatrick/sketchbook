@@ -2,6 +2,16 @@ int wormCount = 100;
 float speed = 5;
 XYZWorm[] worms = new XYZWorm[wormCount];
 
+float camera_angle = HALF_PI;
+float camera_x = 0;
+float camera_y = -300;
+float camera_z = 0;
+float radius = 500;
+
+float subject_x = 0;
+float subject_y = 0;
+float subject_z = 0;
+
 void setup() {
   fullScreen(P3D);
   
@@ -12,13 +22,32 @@ void setup() {
 
 void draw() {
   
-  background(0);
+  move_camera();
   
-  translate(width/2, height/2);
+  background(0);
   
   for (int i = 0; i < worms.length; i++) {
     worms[i].move();
   }
+  
+  draw_cube();
+}
+
+void move_camera() {
+  camera_x = radius * cos(camera_angle);
+  camera_z = radius * sin(camera_angle);
+  
+  camera(camera_x, camera_y, camera_z, // camera position
+          subject_x, subject_y, subject_z, // pointing at
+          0, 1, 0); // choose 'up'
+          
+  camera_angle += 0.003;
+}
+
+void draw_cube() {
+  stroke(255);
+  noFill();
+  box(200);
 }
 
 class XYZWorm {
